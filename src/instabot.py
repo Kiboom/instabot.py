@@ -66,6 +66,9 @@ from .sql_updates import get_username_random, get_username_to_unfollow_random
 from .sql_updates import check_and_insert_user_agent
 from fake_useragent import UserAgent
 
+import re
+from background_task import background
+
 
 class InstaBot:
     """
@@ -290,8 +293,12 @@ class InstaBot:
         self.write_log(log_string)
         self.login()
         self.populate_user_blacklist()
+<<<<<<< HEAD
         signal.signal(signal.SIGINT, self.cleanup)
         signal.signal(signal.SIGTERM, self.cleanup)
+=======
+        # signal.signal(signal.SIGTERM, self.cleanup)
+>>>>>>> background task
         atexit.register(self.cleanup)
         self.instaload = instaloader.Instaloader()
     
@@ -821,8 +828,9 @@ class InstaBot:
                     log_string = "Followed: %s #%i." % (user_id,
                                                         self.follow_counter)
                     self.write_log(log_string)
-                    username = self.get_username_by_user_id(user_id=user_id)
-                    insert_username(self, user_id=user_id, username=username)
+                    # username = self.get_username_by_user_id(user_id=user_id)
+                    # insert_username(self, user_id=user_id, username=username)
+                    insert_username(self, user_id=user_id, username=user_id)
                 return follow
             except:
                 logging.exception("Except on follow!")
@@ -891,6 +899,7 @@ class InstaBot:
             self.write_log("Exit Program... GoodBye")
             sys.exit(0)
 
+    # @background(schedule=5)
     def new_auto_mod(self):
         while self.prog_run and self.login_status:
             now = datetime.datetime.now()
